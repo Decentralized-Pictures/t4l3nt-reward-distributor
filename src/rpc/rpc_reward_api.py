@@ -24,14 +24,14 @@ COMM_BIGMAP_QUERY = "{}/chains/main/blocks/{}/context/big_maps/{}/{}"
 COMM_BAKING_RIGHTS = "{}/chains/main/blocks/{}/helpers/baking_rights?cycle={}&delegate={}"
 COMM_ENDORSING_RIGHTS = "{}/chains/main/blocks/{}/helpers/endorsing_rights?cycle={}&delegate={}"
 COMM_FROZEN_BALANCE = "{}/chains/main/blocks/{}/context/delegates/{}/frozen_balance_by_cycle"
-
+COMM_CYCLE="https://explorer.tlnt.net:8001/v1/cycles/{}"
 # Constants used for calculations related to the cycles before Granada
-CYCLES_BEFORE_GRANADA = 388
-BLOCKS_BEFORE_GRANADA = 1589248
+CYCLES_BEFORE_GRANADA = 0
+BLOCKS_BEFORE_GRANADA = 0
 BLOCKS_PER_CYCLE_BEFORE_GRANADA = 4096
 BLOCK_PER_ROLL_SNAPSHOT_BEFORE_GRANADA = 256
-FIRST_CYCLE_REWARDS_GRANADA = 394
-FIRST_CYCLE_SNAPSHOT_GRANADA = 396
+FIRST_CYCLE_REWARDS_GRANADA = 1
+FIRST_CYCLE_SNAPSHOT_GRANADA = 1
 
 
 class RpcRewardApiImpl(RewardApi):
@@ -209,6 +209,7 @@ class RpcRewardApiImpl(RewardApi):
             raise e from e
 
     def __get_unfrozen_rewards(self, level_of_last_block_in_unfreeze_cycle, cycle):
+        logger.info("GET UNFROZE JON: %s CYCLE %s" % (level_of_last_block_in_unfreeze_cycle, cycle))
         request_metadata = COMM_BLOCK.format(self.node_url, level_of_last_block_in_unfreeze_cycle) + '/metadata'
         metadata = self.do_rpc_request(request_metadata)
         balance_updates = metadata["balance_updates"]
@@ -219,10 +220,7 @@ class RpcRewardApiImpl(RewardApi):
             if balance_update["kind"] == "freezer":
                 if balance_update["delegate"] == self.baking_address:
                     # Protocols < Athens (004) mistakenly used 'level'
-                    if (("level" in balance_update and int(balance_update["level"]) == cycle)
-                        or ("cycle" in balance_update and int(balance_update["cycle"]) == cycle)) \
-                            and int(balance_update["change"]) < 0:
-
+                    if int(balance_update["change"]) < 0:
                         if balance_update["category"] == "rewards":
                             unfrozen_rewards = -int(balance_update["change"])
                             logger.debug(
@@ -354,6 +352,7 @@ class RpcRewardApiImpl(RewardApi):
 
         # calculate the hash of the block for the chosen snapshot of the rewards cycle
         roll_snapshot, level_snapshot_block = self.__get_roll_snapshot_block_level(cycle, current_level)
+        logger.info("LEVEL SNAPSHOT BLOCK %s" % level_snapshot_block)
         if level_snapshot_block == "":
             raise ApiProviderException("[get_d_d_b] level_snapshot_block is empty. Unable to proceed.")
         if roll_snapshot < 0 or roll_snapshot > 15:
@@ -375,14 +374,17 @@ class RpcRewardApiImpl(RewardApi):
             # by subtracting unfrozen rewards due to when the snapshot is taken
             # within the block context. For more information, see:
             # https://medium.com/@_MisterWalker_/we-all-were-wrong-baking-bad-and-most-bakers-were-using-wrong-data-to-calculate-staking-rewards-a8c26f5ec62b
-            if roll_snapshot == 15:
-                if cycle >= FIRST_CYCLE_REWARDS_GRANADA:
+            logger.info("Roll snapshot number %s" % roll_snapshot)
+            if roll_snapshot <= 2:
+                #if cycle >= FIRST_CYCLE_REWARDS_GRANADA:
                     # Since cycle 394, we use an offset of 1589248 blocks (388 cycles pre-Granada of 4096 blocks each)
                     # Cycles start at 0.
-                    old_rewards_cycle = CYCLES_BEFORE_GRANADA + ((level_snapshot_block - BLOCKS_BEFORE_GRANADA) / self.blocks_per_cycle) - self.preserved_cycles - 1
-                else:
-                    old_rewards_cycle = (level_snapshot_block / BLOCKS_PER_CYCLE_BEFORE_GRANADA) - self.preserved_cycles - 1
+                 #   old_rewards_cycle = CYCLES_BEFORE_GRANADA + ((level_snapshot_block - BLOCKS_BEFORE_GRANADA) / self.blocks_per_cycle) - self.preserved_cycles - 1
+                #else:
+                old_rewards_cycle = int(level_snapshot_block / self.blocks_per_cycle) - self.preserved_cycles
+                logger.info("Getting unfrozen rewards Jon  Snapshot block %s Old Rewards %s Blocks per cycle %s Preserved %s" % (level_snapshot_block, old_rewards_cycle, self.blocks_per_cycle, self.preserved_cycles))
                 _, unfrozen_rewards = self.__get_unfrozen_rewards(level_snapshot_block, old_rewards_cycle)
+                logger.info("Del bal %s Unfrozedn %s" % (delegate_staking_balance,unfrozen_rewards))
                 delegate_staking_balance -= unfrozen_rewards
 
             # Remove baker's address from list of delegators
@@ -472,12 +474,18 @@ class RpcRewardApiImpl(RewardApi):
         if cycle >= FIRST_CYCLE_REWARDS_GRANADA:
             # Since cycle 394, we use an offset of 1589248 blocks (388 cycles pre-Granada of 4096 blocks each)
             # Cycles start at 0
-            snapshot_level = BLOCKS_BEFORE_GRANADA + ((cycle - CYCLES_BEFORE_GRANADA - self.preserved_cycles) * self.blocks_per_cycle + 1)
+            get_level = COMM_CYCLE.format(cycle)
+            logger.info(get_level)
+#            snapshot_level = ((cycle - self.preserved_cycles) * self.blocks_per_cycle + 1) - 1025
+            level = self.do_rpc_request(get_level)
+            logger.info(level)
+            snapshot_level = int(level["snapshotLevel"])
+            logger.info("Snapshot JON JON %s" % snapshot_level)
         else:
             # Using pre-Granada calculation
             snapshot_level = (cycle - self.preserved_cycles) * BLOCKS_PER_CYCLE_BEFORE_GRANADA + 1
 
-        logger.debug("Reward cycle {}, snapshot level {}".format(cycle, snapshot_level))
+        logger.info("Reward cycle {}, snapshot level {}".format(cycle, snapshot_level))
 
         if current_level - snapshot_level >= 0:
             request = COMM_SNAPSHOT.format(self.node_url, snapshot_level, cycle)
@@ -494,7 +502,7 @@ class RpcRewardApiImpl(RewardApi):
 
             logger.debug("Snapshot index {}, snapshot index level {}".format(chosen_snapshot, level_snapshot_block))
 
-            return chosen_snapshot, level_snapshot_block
+            return chosen_snapshot, snapshot_level
 
         else:
             logger.info("Cycle too far in the future")
