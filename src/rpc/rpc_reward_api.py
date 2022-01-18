@@ -209,7 +209,7 @@ class RpcRewardApiImpl(RewardApi):
             raise e from e
 
     def __get_unfrozen_rewards(self, level_of_last_block_in_unfreeze_cycle, cycle):
-        logger.info("GET UNFROZE JON: %s CYCLE %s" % (level_of_last_block_in_unfreeze_cycle, cycle))
+        # logger.info("GET UNFROZE: %s CYCLE %s" % (level_of_last_block_in_unfreeze_cycle, cycle))
         request_metadata = COMM_BLOCK.format(self.node_url, level_of_last_block_in_unfreeze_cycle) + '/metadata'
         metadata = self.do_rpc_request(request_metadata)
         balance_updates = metadata["balance_updates"]
@@ -382,9 +382,9 @@ class RpcRewardApiImpl(RewardApi):
                  #   old_rewards_cycle = CYCLES_BEFORE_GRANADA + ((level_snapshot_block - BLOCKS_BEFORE_GRANADA) / self.blocks_per_cycle) - self.preserved_cycles - 1
                 #else:
                 old_rewards_cycle = int(level_snapshot_block / self.blocks_per_cycle) - self.preserved_cycles
-                logger.info("Getting unfrozen rewards Jon  Snapshot block %s Old Rewards %s Blocks per cycle %s Preserved %s" % (level_snapshot_block, old_rewards_cycle, self.blocks_per_cycle, self.preserved_cycles))
+                # logger.info("Getting unfrozen rewards Snapshot block %s Old Rewards %s Blocks per cycle %s Preserved %s" % (level_snapshot_block, old_rewards_cycle, self.blocks_per_cycle, self.preserved_cycles))
                 _, unfrozen_rewards = self.__get_unfrozen_rewards(level_snapshot_block, old_rewards_cycle)
-                logger.info("Del bal %s Unfrozedn %s" % (delegate_staking_balance,unfrozen_rewards))
+                # logger.info("Del bal %s Unfrozedn %s" % (delegate_staking_balance,unfrozen_rewards))
                 delegate_staking_balance -= unfrozen_rewards
 
             # Remove baker's address from list of delegators
