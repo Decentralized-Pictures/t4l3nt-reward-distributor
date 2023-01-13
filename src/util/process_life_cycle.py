@@ -359,7 +359,7 @@ class ProcessLifeCycle:
             delegator_pays_xfer_fee=self.__cfg.get_delegator_pays_xfer_fee(),
             dest_map=self.__cfg.get_dest_map(),
             network_config=self.__nw_config,
-            publish_stats=not self.args.do_not_publish_stats,
+            publish_stats=False,
             calculations_dir=self.__baking_dirs.calculations_root,
             baking_address=self.__cfg.get_baking_address(),
         ).start()

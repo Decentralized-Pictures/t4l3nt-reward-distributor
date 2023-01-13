@@ -22,7 +22,7 @@ def print_banner(args, script_name):
 
     sleep(0.1)
 
-    print("Tezos Reward Distributor (TRD)" + script_name + " is Starting")
+    print("T4L3NT Reward Distributor (TRD)" + script_name + " is Starting")
 
 
 def parse_arguments(args=None):

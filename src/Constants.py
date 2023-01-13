@@ -18,16 +18,16 @@ REQUIREMENTS_FILE_PATH = "requirements.txt"
 LOCAL_HOST = "127.0.0.1"
 EXIT_PAYMENT_TYPE = "exit"
 # https://forum.tezosagora.org/t/turning-ithacanet-into-a-permanent-testnet-ghostnet/4614
-TESTNET_PREFIX = "ghost"
+TESTNET_PREFIX = "staging"
 TESTNET_SUFFIX = "net"
 CURRENT_TESTNET = (TESTNET_PREFIX + TESTNET_SUFFIX).upper()
 
 
 MAX_SEQUENT_CALLS = 256  # to prevent possible endless looping
 
-FIRST_GRANADA_LEVEL = 1589249
+FIRST_GRANADA_LEVEL = 1
 
-TEZOS_RPC_PORT = 8732
+TEZOS_RPC_PORT = 8733
 
 SIGNER_PORT = 6732
 
@@ -41,20 +41,20 @@ PRIVATE_NODE_URL = "http://{}:{}".format(LOCAL_HOST, TEZOS_RPC_PORT)
 
 # Public RPC https://midl-dev.medium.com/alternatives-to-tezos-giganode-bb67b43945ba
 PUBLIC_NODE_URL = {
-    "MAINNET": "https://mainnet.smartpy.io",
-    CURRENT_TESTNET: "https://testnet.smartpy.io",
+    "MAINNET": "https://rpc.decentralized.pictures",
+    CURRENT_TESTNET: "https://staging-rpc.decentralized.pictures",
 }
 
 # TzStats
 TZSTATS_PUBLIC_API_URL = {
-    "MAINNET": "https://api.tzstats.com",
-    CURRENT_TESTNET: "https://api.{}.tzstats.com".format(TESTNET_PREFIX.lower()),
+    "MAINNET": "https://api.tzstats-example.wtf",
+    CURRENT_TESTNET: "https://api.{}.tzstats-example.wtf".format(TESTNET_PREFIX.lower()),
 }
 
 # TzKT
 TZKT_PUBLIC_API_URL = {
-    "MAINNET": "https://api.tzkt.io/v1",
-    CURRENT_TESTNET: "https://api.{}.tzkt.io/v1".format(CURRENT_TESTNET.lower()),
+    "MAINNET": "https://explorer-api.tlnt.net/v1",
+    CURRENT_TESTNET: "https://explorer.tlnt.net:8009/v1",
 }
 
 # Network Constants
@@ -75,38 +75,38 @@ DEFAULT_NETWORK_CONFIG_MAP = {
     "MAINNET": {
         # General
         "NAME": "MAINNET",
-        "NB_FREEZE_CYCLE": 5,  # needs deprecation
-        "MINIMAL_BLOCK_DELAY": 30,
-        "BLOCKS_PER_CYCLE": 8192,
+        "NB_FREEZE_CYCLE": 1,  # needs deprecation
+        "MINIMAL_BLOCK_DELAY": 15,
+        "BLOCKS_PER_CYCLE": 1024,
         "BLOCKS_PER_STAKE_SNAPSHOT": 512,
         # Consensus
         "CONSENSUS_COMMITTEE_SIZE": 7000,
         "CONSENSUS_THRESHOLD": 4667,
-        "BAKING_REWARD_FIXED_PORTION": 10000000,
-        "BAKING_REWARD_BONUS_PER_SLOT": 4286,
-        "ENDORSING_REWARD_PER_SLOT": 2857,
+        "BAKING_REWARD_FIXED_PORTION": 1000000,
+        "BAKING_REWARD_BONUS_PER_SLOT": 500,
+        "ENDORSING_REWARD_PER_SLOT": 250,
         # Fixed baking amount (10)+ bonus (10 in the best case)
-        "BLOCK_REWARD": 20000000,
+        "BLOCK_REWARD": 2166500,
         # endorsing_reward = (1 - baking_reward_ratio) * (1 - bonus_ratio) * total_rewards
         # = (1-1/4)*(1-1/3)*40
-        "ENDORSEMENT_REWARDS": 20000000,
+        "ENDORSEMENT_REWARDS": 1750000,
     },
     CURRENT_TESTNET: {
         # General
         "NAME": CURRENT_TESTNET,
-        "NB_FREEZE_CYCLE": 3,  # needs deprecation
+        "NB_FREEZE_CYCLE": 1,  # needs deprecation
         "MINIMAL_BLOCK_DELAY": 15,
-        "BLOCKS_PER_CYCLE": 4096,
-        "BLOCKS_PER_STAKE_SNAPSHOT": 256,
+        "BLOCKS_PER_CYCLE": 1024,
+        "BLOCKS_PER_STAKE_SNAPSHOT": 512,
         # Consensus
         "CONSENSUS_COMMITTEE_SIZE": 7000,
         "CONSENSUS_THRESHOLD": 4667,
-        "BAKING_REWARD_FIXED_PORTION": 5000000,
-        "BAKING_REWARD_BONUS_PER_SLOT": 2143,
-        "ENDORSING_REWARD_PER_SLOT": 1428,
-        #
-        "BLOCK_REWARD": 10000000,
-        "ENDORSEMENT_REWARDS": 10000000,
+        "BAKING_REWARD_FIXED_PORTION": 1000000,
+        "BAKING_REWARD_BONUS_PER_SLOT": 500,
+        "ENDORSING_REWARD_PER_SLOT": 250,
+        # Fixed baking amount (10)+ bonus (10 in the best case)
+        "BLOCK_REWARD": 2166500,
+        "ENDORSEMENT_REWARDS": 1750000,
     },
 }
 
