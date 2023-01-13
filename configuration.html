@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to configure TRD? &mdash; Tezos Reward Distributor (TRD) 9.0 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Payment Address" href="paymentaddress.html" />
+    <link rel="prev" title="How to get and install TRD?" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Tezos Reward Distributor (TRD)
+          </a>
+              <div class="version">
+                9.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Content:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">How to get and install TRD?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to configure TRD?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fee-setup">Fee Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#baker-configuration">Baker Configuration:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="paymentaddress.html">Payment Address</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tezossigner.html">How to use the Tezos Signer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">How to run TRD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rundocker.html">How to run TRD in Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="payouttiming.html">Payout timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linuxservice.html">Run as Linux Service (WIP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="state_machine.html">TRD State Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">For Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistics.html">Anonymous Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="codeofconduct.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tezos Reward Distributor (TRD)</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to configure TRD?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="how-to-configure-trd">
+<h1>How to configure TRD?<a class="headerlink" href="#how-to-configure-trd" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fee-setup">
+<h2>Fee Setup<a class="headerlink" href="#fee-setup" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The file <em>fee.in</em> has been deprecated.</div>
+<div class="line"><strong>Advanced user</strong>: You can change the values at <em>src/pay/batch_payer.py</em></div>
+</div>
+</div>
+<div class="section" id="baker-configuration">
+<h2>Baker Configuration:<a class="headerlink" href="#baker-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Each baker has its own configuration and policy. Therefore, a payment system should be flexible enough to cover the needs of bakers. The application uses a yaml file for loading baker specific configurations and is loaded at every start.
+There are two options to create a custom yaml file:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>You can use the interactive configuration tool (configure.py)</p></li>
+<li><p>You can copy&amp;paste the example config from ~/tezos-reward-distributor/examples into ~/pymnt/cfg, rename and change it according to your baker policy.</p></li>
+</ol>
+</div></blockquote>
+<p>If you want to use Option a, you can use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Move into tezos-reward-distributor directory</span>
+<span class="n">cd</span> <span class="n">tezos</span><span class="o">-</span><span class="n">reward</span><span class="o">-</span><span class="n">distributor</span>
+<span class="c1"># Run the interactive configuration tool</span>
+<span class="n">python3</span> <span class="n">src</span><span class="o">/</span><span class="n">configure</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>If you want to use Option b, you can use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create directory</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">pymnt</span><span class="o">/</span><span class="n">cfg</span><span class="o">/</span>
+<span class="c1"># Copy &amp; Paste</span>
+<span class="n">cp</span> <span class="n">tezos</span><span class="o">-</span><span class="n">reward</span><span class="o">-</span><span class="n">distributor</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">tz1boot1pK9h2BVGXdyvfQSv8kd1LQM6H889</span><span class="o">.</span><span class="n">yaml</span> <span class="o">~/</span><span class="n">pymnt</span><span class="o">/</span><span class="n">cfg</span><span class="o">/</span>
+<span class="c1"># Edit the file with nano</span>
+<span class="n">nano</span> <span class="o">~/</span><span class="n">pymnt</span><span class="o">/</span><span class="n">cfg</span><span class="o">/</span><span class="n">tz1boot1pK9h2BVGXdyvfQSv8kd1LQM6H889</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>By default, configuration files are kept under ~/pymnt/cfg directory. The configuration directory can be changed with “-f” configuration option. The name of a configuration file should be the baker’s address (e.g. tz1boot1pK9h2BVGXdyvfQSv8kd1LQM6H889.yaml).
+If you want to use with a decimal operator within your config, please use a decimal point.</p>
+<p>Available configuration parameters are:</p>
+<dl>
+<dt><strong>baking_address</strong></dt><dd><p>Address of the baker. It must be an implicit account (tz1). No alias is allowed.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">baking_address</span><span class="p">:</span> <span class="n">tz1boot1pK9h2BVGXdyvfQSv8kd1LQM6H889</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>payment_address</strong></dt><dd><p>This is the address where payments will be done from. A PKH of implicit or originated account is accepted. For more information on the payment address configuration please refer to the next section. No alias is allowed.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">payment_address</span><span class="p">:</span> <span class="n">tz1boot1pK9h2BVGXdyvfQSv8kd1LQM6H889</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>rewards_type</strong></dt><dd><p>There are two options for calculating the total rewards earned by a baker at the end of each cycle. If this parameter is missing, ‘actual’ rewards take affect.</p>
+<ul class="simple">
+<li><p>‘actual’: Rewards are calculated based on the actual number of bakes, at any round. Transaction fees, bonuses and other block rewards are included in the rewards when earned. If a bake is missed, rewards are not earned and therefore not included. If endorsement rewards are not earned due to a failure to reveal a nonce or excessive unavailability of your baker, is it not included.</p></li>
+<li><p>‘ideal’: Rewards are calculated assuming ideal behaviour of the baker, and actual behaviour of other bakers. If a bake is missed, 20 tez rewards are paid out despite not having been earned. If a round 0 payload has been produced, but another baker baked the block, the missed bonus is <strong>not</strong> paid out, because it is due to other bakers being offline and not endorsing. Transaction fees, bonuses and other block rewards are included in the rewards. The endorsing reward is paid out even in case it has not been earned. Select this type of rewards to insure against downtime of your baker but still account for real world conditions. This way, you will get optimal ranking in baker evaluation services despite any downtime.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rewards_type</span><span class="p">:</span> <span class="n">actual</span>
+</pre></div>
+</div>
+<p>Note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Setting &#39;RELEASE_OVERRIDE&#39; to &#39;-11&#39; will trigger estimated payouts which are adjusted later on. See: :ref:`payout_timing`
+</pre></div>
+</div>
+</dd>
+<dt><strong>service_fee</strong></dt><dd><p>A decimal in range [0-100]. Also known as the baker’s fee. This is evaluated as a percentage value. Example: If set to 5, then 5% of baking rewards are kept as a service fee by the baker.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">service_fee</span><span class="p">:</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>founders_map</strong></dt><dd><p>A dictionary of PKH and ratio (decimal in the range [0-1]) pairs. Each item in this dictionary represents PKH of each founder and his ratio of the shares coming from the service fee. Implicit or originated addresses are accepted. It is important that the sum of all ratios equals to 1. This map is optional if founders do not want to be paid from service fees, in this case, service fee remains in baking balance.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">founders_map</span><span class="p">:</span>
+    <span class="p">{</span><span class="s1">&#39;tz3VxS7ff4YnZRs8b4mMP4WaMVpoQjuo1rjf&#39;</span> <span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+     <span class="s1">&#39;tz1PirboZKFVqkfE45hVLpkpXaZtLk3mqC17&#39;</span> <span class="p">:</span> <span class="mf">0.4</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Alice and Bob are both founders of Acme Bakery. Their bakery fee is 10%. Alice has a 60% (0.6) interest in the bakery, and Bob has a 40% (0.4) interest. When rewards are delivered at the end of each cycle, 10% is taken as the bakery fee (ie: <em>service_fee</em>). That 10% is then divided between Alice and Bob according to their ratios.</p>
+</dd>
+<dt><strong>owners_map</strong></dt><dd><p>A dictionary of PKH and ratio ( decimal in the range [0-1]) pairs. Each item in this dictionary represents PKH of each balance owner and his ratio of the amount he owns in the total baking balance. Implicit or originated addresses are accepted. It is important that the sum of all ratios equals to 1. This map is optional if owners do not want to be paid for baking rewards, in this case, baking rewards remain in baking balance.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Current</span> <span class="n">Baker</span> <span class="n">Balance</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span><span class="mi">400</span> <span class="n">tez</span>
+<span class="n">Total</span> <span class="n">Delegations</span><span class="p">:</span> <span class="mi">69</span><span class="p">,</span><span class="mi">520</span> <span class="n">tez</span>
+<span class="n">Total</span> <span class="n">Staked</span><span class="p">:</span> <span class="mi">86</span><span class="p">,</span><span class="mi">920</span> <span class="n">tez</span>
+
+<span class="n">service_fee</span><span class="p">:</span> <span class="mi">9</span>
+<span class="n">owners_map</span><span class="p">:</span>
+  <span class="p">{</span><span class="s1">&#39;tz1PV5g16m9hHMAVJ4Hx6NzzUHgksDnTLFcK&#39;</span> <span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+   <span class="s1">&#39;tz1PirboZKFVqkfE45hVLpkpXaZtLk3mqC17&#39;</span> <span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+   <span class="s1">&#39;tz1VxS7ff4YnZRs8b4mMP4WaMVpoQjuo1rjf&#39;</span> <span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Charlie, and Dave, have each transfered 6,960 tez to the baker address. Edwin has transfered 3,480 tez. They are each partial owners of the baking balance. When rewards are delivered at the end of each cycle, 9% is taken as the bakery fee (ie: <em>service_fee</em>). That 9% is dispersed to any <em>founders</em>. If there are no founders, that 9% remains in the baker’s balance.
+The baker address is technically a delegator to itself. Its share of rewards are part of the overall cycle rewards. Charlie, Dave, and Edwin divide the “baker address rewards” as per the ratios in <em>owners_map</em>. Additionally, owners are <em>not</em> subject to the <em>service_fee</em>.</p>
+</dd>
+<dt><strong>specials_map</strong></dt><dd><p>A dictionary of PKH and fee (decimal in the range [0-100] ) pairs. This dictionary can be used to set special service fee values for desired delegators.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">specials_map</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;tz3VxS7ff4YnZRs8b4mMP4WaMVpoQjuo1rjf&#39;</span> <span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s1">&#39;tz1PirboZKFVqkfE45hVLpkpXaZtLk3mqC17&#39;</span> <span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>supporters_set</strong></dt><dd><p>A set of PKH values. Each PKH represents a supporter of the baker. Supporters are not charged with a service fee. Founders and balance owners are natural supporters, they are not needed to be added.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">supporters_set</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;tz3VxS7ff4YnZRs8b4mMP4WaMVpoQjuo1rjf&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;tz1PirboZKFVqkfE45hVLpkpXaZtLk3mqC17&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>min_delegation_amt</strong></dt><dd><p>A minimum delegation amount can be set here. If this value is set to 10, 10 tez are required as minimum. It is important to define what happens to the rewards of excluded delegates that are below the minimum delegation balance in rules_map.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">min_delegation_amt</span> <span class="p">:</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>min_payment_amt</strong></dt><dd><p>A minimum payment amount can be set here. If this value is set to 10, 10 tez are required as minimum. Inherits behavior of excluded delegates set for <em>min_delegation_amt</em>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">min_payment_amt</span> <span class="p">:</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>reactivate_zeroed</strong></dt><dd><p>True/False - If True, an account to be paid found with a 0 balance will be reactivated, incurring the necessary burn fee and storage, and rewards will be sent. If False, any account with a 0 balance will be skipped payment. This will be noted in the CSV report.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reactivate_zeroed</span> <span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>delegator_pays_xfer_fee</strong></dt><dd><p>Default value is true. If set to false, the transfer fee for each payment is paid by the delegate. Otherwise, the transfer fee is deducted from the delegator reward.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delegator_pays_xfer_fee</span> <span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>delegator_pays_ra_fee</strong></dt><dd><p>True/False - Functions just like delegator_pays_xfer_fee, except refers to the burn/reactivation fee. If True, the burn fee is subtracted from the reward payment (ie: delegate pays). If False, burn fee is paid for by baker. If reactivate_zeroed: True and delegator_pays_ra_fee: True but the reward is smaller than the burn fee, their rewards will be ignored and will simply remain at the bakers address.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delegator_pays_ra_fee</span> <span class="p">:</span> <span class="kc">False</span>
+
+<span class="n">Note</span><span class="p">:</span> <span class="n">This</span> <span class="n">option</span> <span class="n">does</span> <span class="n">also</span> <span class="n">apply</span> <span class="n">to</span> <span class="n">the</span> <span class="n">burn</span> <span class="n">fee</span> <span class="n">needed</span> <span class="n">to</span> <span class="n">payout</span> <span class="n">to</span> <span class="n">kt</span> <span class="n">accounts</span><span class="o">.</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>pay_denunciation_rewards</strong></dt><dd><p>True/False - Baker may get rewarded for denunciating another baker’s equivocation (double baking or double endorsing). The protocol rewards the baker including the denunciation. When True, these rewards will be distributed. When False, they will remain in the baker’s account, allowing the baker to reimburse the party at fault if they desire. Must be set to True when using RPC backend as RPC is not able to itemize rewards.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pay_denunciation_rewards</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>rules_map</strong></dt><dd><p>The rules_map is needed to redirect payments. A pre-defined source (left side) is mindelegation. Pre-defined destinations (right side) are: TOF = to founders balance, TOB = to bakers balance, and TOE = to everyone. Variable sources and destinations are PKHs. New since v8.0 PKH: Dexter enables payouts to Dexter liquidity pools.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rules_map</span><span class="p">:</span>
+  <span class="n">tz1T5woJN3r7SV5v2HGDyA5kurhbD9Y8ZKHZ</span><span class="p">:</span> <span class="n">TOF</span>                                         <span class="c1">#(redirects payment from tz1T5woJN3r7SV5v2HGDyA5kurhbD9Y8ZKHZ to founders)</span>
+  <span class="n">tz1YTMY7Zewx6AMM2h9eCwc8TyXJ5wgn9ace</span><span class="p">:</span> <span class="n">TOB</span>                                         <span class="c1">#(payment to tz1YTMY7Zewx6AMM2h9eCwc8TyXJ5wgn9ace will remain in the bakers balance)</span>
+  <span class="n">tz1V9SpwXaGFiYdDfGJtWjA61EumAH3DwSyT</span><span class="p">:</span> <span class="n">tz1fgX6oRWQb4HYHUT6eRjW8diNFrqjEfgq7</span>        <span class="c1">#(redirects payment from tz1V9S... to tz1fgX...)</span>
+  <span class="n">tz1RMmSzPSWPSSaKU193Voh4PosWSZx1C7Hs</span><span class="p">:</span> <span class="n">Dexter</span>                                      <span class="c1">#(indicates address is a dexter pool; TRD will send rewards to pool members)</span>
+  <span class="n">mindelegation</span><span class="p">:</span> <span class="n">TOE</span>                                                                <span class="c1">#(mindelegation will be shared with everyone)</span>
+</pre></div>
+</div>
+</dd>
+<dt><strong>plugins</strong></dt><dd><p>Please consult the <a class="reference external" href="plugins.html">plugins docs</a> for more details on the configuring the various plugins.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="How to get and install TRD?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="paymentaddress.html" class="btn btn-neutral float-right" title="Payment Address" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, see contributors.csv.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
